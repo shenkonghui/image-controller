@@ -1,0 +1,7 @@
+apiVersion: github.com/v1
+kind: ImageConfig
+metadata:
+  name: example-imageconfig
+spec:
+  # Add fields here
+  size: 3
