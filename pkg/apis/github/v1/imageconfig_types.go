@@ -9,9 +9,10 @@ import (
 
 // ImageConfigSpec defines the desired state of ImageConfig
 type ImageConfigSpec struct {
-        repo string     `json:",inline"`
-        project string  `json:",inline"`
-        newRepo string   `json:",inline"`
+        Repo string        `json:"repo,omitempty"`
+        Project string     `json:"project,omitempty"`
+        NewRepo string     `json:"newRepo,omitempty"`
+		Newproject string  `json:"newproject,omitempty"`
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "operator-sdk generate k8s" to regenerate code after modifying this file
 	// Add custom validation using kubebuilder tags: https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html

@@ -30,6 +30,15 @@ spec:
             type: object
           spec:
             description: ImageConfigSpec defines the desired state of ImageConfig
+            properties:
+              newRepo:
+                type: string
+              newproject:
+                type: string
+              project:
+                type: string
+              repo:
+                type: string
             type: object
           status:
             description: ImageConfigStatus defines the observed state of ImageConfig

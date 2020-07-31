@@ -1,7 +1,7 @@
 apiVersion: github.com/v1
 kind: ImageConfig
 metadata:
-  name: example-imageconfig
+  name: quay
 spec:
-  # Add fields here
-  size: 3
+  repo: quay.io
+  newRepo: quay.mirrors.ustc.edu.cn

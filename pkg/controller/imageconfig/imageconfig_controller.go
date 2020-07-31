@@ -2,6 +2,8 @@ package imageconfig
 
 import (
 	"context"
+	"fmt"
+	"k8s.io/apimachinery/pkg/api/errors"
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 
@@ -94,7 +96,28 @@ func (r *ReconcileImageConfig) Reconcile(request reconcile.Request) (reconcile.R
 	reqLogger := log.WithValues("Request.Namespace", request.Namespace, "Request.Name", request.Name)
 	reqLogger.Info("Reconciling ImageConfig")
 
+	instance := &githubv1.ImageConfig{}
+	err := r.client.Get(context.TODO(),request.NamespacedName,instance)
+	// 更新内存中的对象
+	if err != nil && errors.IsNotFound(err) {
+		log.V(0).Info(fmt.Sprintf("imageconfig[%s] not find, Delete from cache",request.Name))
+		ImageConfigCache.Range(func(key, value interface{}) bool {
+			ic, ok := value.(*githubv1.ImageConfig)
+			if !ok{
+				return false
+			}
 
+			if ic.Name == instance.Name &&
+				ic.Namespace == instance.Namespace{
+				ImageConfigCache.Delete(fmt.Sprintf("%s/%s",request.Namespace,ic.Spec.Repo))
+			}
+			return true
+		})
+
+	} else {
+		//r.logwithRqa(instance, "update rqa", 0)
+		ImageConfigCache.Store(fmt.Sprintf("%s/%s",request.Namespace,instance.Spec.Repo),instance)
+	}
 	// Pod already exists - don't requeue
 	return reconcile.Result{}, nil
 }
